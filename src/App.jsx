@@ -1,11 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import authService from './appwrite/auth.js'
+import {login,logout} from './store/authSlice.js'
+import { Header,Footer } from './components/index.js';
 
 const App = () => {
-  //console.log(import.meta.env.VITE_WRITE_URL);
+  const [loading,setLoading]=useState(false);
+  const dispatch=useDispatch();
   
+  useEffect(()=>{
+       authService.getCurrentUser()
+       .then((userData)=>{
+         if(userData){
+           dispatch(login({userData}));
+         }else{
+          dispatch(logout());
+         }
+       })
+       .finally(()=>{setLoading(false)})
+  },[])
+  
+  if(loading){
+    return <div>Loading</div>
+  }
+
   return (
-    <div className='w-full h-screen bg-black'>
-         <h1 className='text-fuchsia-500'>This is a Blog App</h1>
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-500'>
+         <div className='w-full block '>
+            <Header/>
+            <main>
+               {/*Todo : <Outlet>*/}
+            </main>
+            <Footer/>
+         </div>
     </div>
   )
 }

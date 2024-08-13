@@ -40,6 +40,8 @@ export class AuthService {
   }
 
   async getCurrentUser() {
+    //console.log("URL :",conf.appwriteUrl);
+    
     try {
       return await this.account.get();
     } catch (error) {
